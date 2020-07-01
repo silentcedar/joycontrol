@@ -55,86 +55,65 @@ Options:
 
 
 async def test_controller_buttons(controller_state: ControllerState):
-    """
-    Example controller script.
-    Navigates to the "Test Controller Buttons" menu and presses all buttons.
-    """
+
     if controller_state.get_controller() != Controller.PRO_CONTROLLER:
         raise ValueError('This script only works with the Pro Controller!')
 
     # waits until controller is fully connected
     await controller_state.connect()
 
-    await ainput(prompt='Make sure the Switch is in the Home menu and press <enter> to continue.')
-
-    """
-    # We assume we are in the "Change Grip/Order" menu of the switch
-    await button_push(controller_state, 'home')
-
-    # wait for the animation
-    await asyncio.sleep(1)
-    """
-
-    # Goto settings
-    await button_push(controller_state, 'down', sec=1)
-    await button_push(controller_state, 'right', sec=2)
-    await asyncio.sleep(0.3)
-    await button_push(controller_state, 'left')
-    await asyncio.sleep(0.3)
-    await button_push(controller_state, 'a')
-    await asyncio.sleep(0.3)
-
-    # go all the way down
-    await button_push(controller_state, 'down', sec=4)
-    await asyncio.sleep(0.3)
-
-    # goto "Controllers and Sensors" menu
-    for _ in range(2):
-        await button_push(controller_state, 'up')
-        await asyncio.sleep(0.3)
-    await button_push(controller_state, 'right')
-    await asyncio.sleep(0.3)
-
-    # go all the way down
-    await button_push(controller_state, 'down', sec=3)
-    await asyncio.sleep(0.3)
-
-    # goto "Test Input Devices" menu
-    await button_push(controller_state, 'up')
-    await asyncio.sleep(0.3)
-    await button_push(controller_state, 'a')
-    await asyncio.sleep(0.3)
-
-    # goto "Test Controller Buttons" menu
-    await button_push(controller_state, 'a')
-    await asyncio.sleep(0.3)
-
-    # push all buttons except home and capture
-    button_list = controller_state.button_state.get_available_buttons()
-    if 'capture' in button_list:
-        button_list.remove('capture')
-    if 'home' in button_list:
-        button_list.remove('home')
+    await ainput(prompt='Make sure your character is in the right place press <enter> to continue.')
 
     user_input = asyncio.ensure_future(
-        ainput(prompt='Pressing all buttons... Press <enter> to stop.')
+        ainput(prompt='Starting the script... Press <enter> to stop.')
     )
 
     # push all buttons consecutively until user input
     while not user_input.done():
-        for button in button_list:
-            await button_push(controller_state, button)
-            await asyncio.sleep(0.1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(5)
 
-            if user_input.done():
-                break
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
 
-    # await future to trigger exceptions in case something went wrong
-    await user_input
+        await button_push(controller_state, 'x')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'up')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'b')
+        await asyncio.sleep(1)
 
-    # go back to home
-    await button_push(controller_state, 'home')
+        await button_push(controller_state, 'plus')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'up')
+        await asyncio.sleep(1)
+        await button_push(controller_state, 'down')
+        await asyncio.sleep(0.5)
+        await button_push(controller_state, 'down')
+        await asyncio.sleep(0.5)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(0.5)
+        await button_push(controller_state, 'a')
+        await asyncio.sleep(20)
 
+        if user_input.done():
+            break
 
 async def set_nfc(controller_state, file_path):
     """
